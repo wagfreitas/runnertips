@@ -1,0 +1,233 @@
+import 'package:flutter/material.dart';
+import '../../../../core/services/race_service.dart';
+import '../../../../core/models/race_model.dart';
+
+class RaceProvider extends ChangeNotifier {
+  final RaceService _raceService = RaceService();
+  
+  List<RaceModel> _races = [];
+  List<RaceSuggestion> _suggestions = [];
+  bool _isLoading = false;
+  bool _isSearching = false;
+  bool _showSuggestions = false;
+  String? _errorMessage;
+  String _searchQuery = '';
+
+  // Getters
+  List<RaceModel> get races => _races;
+  List<RaceSuggestion> get suggestions => _suggestions;
+  bool get isLoading => _isLoading;
+  bool get isSearching => _isSearching;
+  bool get showSuggestions => _showSuggestions;
+  String? get errorMessage => _errorMessage;
+  String get searchQuery => _searchQuery;
+
+  /// Carrega todas as corridas
+  Future<void> loadRaces() async {
+    _setLoading(true);
+    _clearError();
+
+    try {
+      _races = await _raceService.getAllRaces();
+      _setLoading(false);
+    } catch (e) {
+      _setError('Erro ao carregar corridas: ${e.toString()}');
+      _setLoading(false);
+    }
+  }
+
+  /// Busca corridas por nome
+  Future<void> searchRaces(String query) async {
+    _searchQuery = query;
+    _isSearching = true;
+    _showSuggestions = false;
+    _clearError();
+    notifyListeners();
+
+    try {
+      if (query.trim().isEmpty) {
+        await loadRaces();
+      } else {
+        _races = await _raceService.searchRacesByName(query);
+        
+        // Se não encontrou resultados, busca externamente
+        if (_races.isEmpty) {
+          await _searchExternalRaces(query);
+        }
+      }
+    } catch (e) {
+      _setError('Erro ao buscar corridas: ${e.toString()}');
+    } finally {
+      _isSearching = false;
+      notifyListeners();
+    }
+  }
+
+  /// Busca corridas externamente quando não encontra resultados locais
+  Future<void> _searchExternalRaces(String query) async {
+    try {
+      _suggestions = await _raceService.searchExternalRaces(query);
+      
+      if (_suggestions.isNotEmpty) {
+        _showSuggestions = true;
+      } else {
+        _setError('Nenhuma corrida encontrada. Tente buscar por termos diferentes.');
+      }
+    } catch (e) {
+      _setError('Erro ao buscar corridas externas: ${e.toString()}');
+    }
+  }
+
+  /// Adiciona uma corrida sugerida ao banco de dados
+  Future<bool> addSuggestedRace(RaceSuggestion suggestion) async {
+    try {
+      final raceId = await _raceService.addSuggestedRace(suggestion);
+      
+      if (raceId != null) {
+        // Remove a sugestão da lista
+        _suggestions.removeWhere((s) => s == suggestion);
+        
+        // Recarrega as corridas
+        await loadRaces();
+        
+        // Se não há mais sugestões, esconde a lista
+        if (_suggestions.isEmpty) {
+          _showSuggestions = false;
+        }
+        
+        return true;
+      }
+      return false;
+    } catch (e) {
+      _setError('Erro ao adicionar corrida: ${e.toString()}');
+      return false;
+    }
+  }
+
+  /// Adiciona uma nova corrida
+  Future<bool> addRace(RaceModel race) async {
+    try {
+      final raceId = await _raceService.addRace(race);
+      
+      if (raceId != null) {
+        await loadRaces(); // Recarrega a lista
+        return true;
+      }
+      return false;
+    } catch (e) {
+      _setError('Erro ao adicionar corrida: ${e.toString()}');
+      return false;
+    }
+  }
+
+  /// Atualiza uma corrida existente
+  Future<bool> updateRace(RaceModel race) async {
+    try {
+      final success = await _raceService.updateRace(race);
+      
+      if (success) {
+        await loadRaces(); // Recarrega a lista
+      }
+      
+      return success;
+    } catch (e) {
+      _setError('Erro ao atualizar corrida: ${e.toString()}');
+      return false;
+    }
+  }
+
+  /// Remove uma corrida
+  Future<bool> deleteRace(String raceId) async {
+    try {
+      final success = await _raceService.deleteRace(raceId);
+      
+      if (success) {
+        await loadRaces(); // Recarrega a lista
+      }
+      
+      return success;
+    } catch (e) {
+      _setError('Erro ao remover corrida: ${e.toString()}');
+      return false;
+    }
+  }
+
+  /// Busca uma corrida por ID
+  Future<RaceModel?> getRaceById(String id) async {
+    try {
+      return await _raceService.getRaceById(id);
+    } catch (e) {
+      _setError('Erro ao buscar corrida: ${e.toString()}');
+      return null;
+    }
+  }
+
+  /// Limpa a busca e volta para a lista completa
+  void clearSearch() {
+    _searchQuery = '';
+    _showSuggestions = false;
+    _suggestions.clear();
+    loadRaces();
+  }
+
+  /// Filtra corridas por status
+  List<RaceModel> getRacesByStatus(String status) {
+    return _races.where((race) => race.status == status).toList();
+  }
+
+  /// Filtra corridas por localização
+  List<RaceModel> getRacesByLocation(String location) {
+    return _races.where((race) => 
+      race.location.toLowerCase().contains(location.toLowerCase())
+    ).toList();
+  }
+
+  /// Filtra corridas por distância
+  List<RaceModel> getRacesByDistance(String distance) {
+    return _races.where((race) => 
+      race.distance.toLowerCase().contains(distance.toLowerCase())
+    ).toList();
+  }
+
+  /// Filtra corridas por mês
+  List<RaceModel> getRacesByMonth(String month) {
+    return _races.where((race) => 
+      race.month.toLowerCase().contains(month.toLowerCase())
+    ).toList();
+  }
+
+  /// Obtém estatísticas das corridas
+  Map<String, int> getRaceStats() {
+    final Map<String, int> stats = {};
+    
+    for (final race in _races) {
+      stats[race.status] = (stats[race.status] ?? 0) + 1;
+    }
+    
+    return stats;
+  }
+
+  /// Limpa mensagens de erro
+  void _clearError() {
+    _errorMessage = null;
+    notifyListeners();
+  }
+
+  /// Define mensagem de erro
+  void _setError(String message) {
+    _errorMessage = message;
+    notifyListeners();
+  }
+
+  /// Define estado de loading
+  void _setLoading(bool loading) {
+    _isLoading = loading;
+    notifyListeners();
+  }
+
+  /// Limpa todas as mensagens e estados
+  void clearMessages() {
+    _errorMessage = null;
+    notifyListeners();
+  }
+}

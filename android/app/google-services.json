@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "508139661405",
+    "project_id": "apprunnertips",
+    "storage_bucket": "apprunnertips.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:508139661405:android:3d22696078e2994eb585b4",
+        "android_client_info": {
+          "package_name": "com.example.runner_tips"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDkC88ovhtR_FHnuM2l7fRrLilTnZFZBCo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
