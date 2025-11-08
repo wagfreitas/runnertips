@@ -499,8 +499,8 @@ class _RacesScreenState extends State<RacesScreen> {
             case BottomNavItem.races:
               // Already on races
               break;
-            case BottomNavItem.training:
-              // Navigate to training
+            case BottomNavItem.tips:
+              // Navigate to tips
               break;
             case BottomNavItem.profile:
               // Navigate to profile
