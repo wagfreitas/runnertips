@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import '../services/session_service.dart';
 import '../../features/auth/presentation/pages/login_screen.dart';
-<<<<<<< HEAD
-import '../../features/race/presentation/pages/races_screen.dart';
-=======
 import '../../features/home/presentation/pages/home_screen.dart';
->>>>>>> 210d463 (feat: login, pesquisa prontos)
 
 class AuthWrapper extends StatefulWidget {
   const AuthWrapper({super.key});
@@ -49,11 +45,7 @@ class _AuthWrapperState extends State<AuthWrapper> {
 
         // Se está logado, vai para a tela principal
         if (_sessionService.isLoggedIn) {
-<<<<<<< HEAD
-          return const RacesScreen();
-=======
           return const HomeScreen();
->>>>>>> 210d463 (feat: login, pesquisa prontos)
         }
 
         // Se não está logado, vai para a tela de login

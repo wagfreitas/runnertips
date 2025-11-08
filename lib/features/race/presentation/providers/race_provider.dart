@@ -11,10 +11,7 @@ class RaceProvider extends ChangeNotifier {
   bool _isSearching = false;
   bool _showSuggestions = false;
   String? _errorMessage;
-<<<<<<< HEAD
-=======
   String? _successMessage;
->>>>>>> 210d463 (feat: login, pesquisa prontos)
   String _searchQuery = '';
 
   // Getters
@@ -24,10 +21,7 @@ class RaceProvider extends ChangeNotifier {
   bool get isSearching => _isSearching;
   bool get showSuggestions => _showSuggestions;
   String? get errorMessage => _errorMessage;
-<<<<<<< HEAD
-=======
   String? get successMessage => _successMessage;
->>>>>>> 210d463 (feat: login, pesquisa prontos)
   String get searchQuery => _searchQuery;
 
   /// Carrega todas as corridas
@@ -44,14 +38,9 @@ class RaceProvider extends ChangeNotifier {
     }
   }
 
-<<<<<<< HEAD
-  /// Busca corridas por nome
-  Future<void> searchRaces(String query) async {
-=======
   /// Busca corridas por nome (apenas busca local)
   Future<void> searchRaces(String query) async {
     print('🔍 Iniciando busca por: "$query"');
->>>>>>> 210d463 (feat: login, pesquisa prontos)
     _searchQuery = query;
     _isSearching = true;
     _showSuggestions = false;
@@ -60,25 +49,13 @@ class RaceProvider extends ChangeNotifier {
 
     try {
       if (query.trim().isEmpty) {
-<<<<<<< HEAD
-        await loadRaces();
-      } else {
-        _races = await _raceService.searchRacesByName(query);
-        
-        // Se não encontrou resultados, busca externamente
-        if (_races.isEmpty) {
-          await _searchExternalRaces(query);
-        }
-      }
-    } catch (e) {
-=======
         print('📋 Busca vazia, carregando todas as corridas');
         await loadRaces();
       } else {
         print('🔎 Buscando localmente por: "$query"');
         _races = await _raceService.searchRacesByName(query);
         print('📊 Resultados locais: ${_races.length} corridas encontradas');
-        
+
         // Não busca externamente automaticamente - aguarda o usuário clicar no botão
         if (_races.isEmpty) {
           print('⚠️ Nenhum resultado local encontrado - aguardando ação do usuário');
@@ -87,7 +64,6 @@ class RaceProvider extends ChangeNotifier {
     } catch (e, stackTrace) {
       print('❌ Erro na busca: $e');
       print('Stack trace: $stackTrace');
->>>>>>> 210d463 (feat: login, pesquisa prontos)
       _setError('Erro ao buscar corridas: ${e.toString()}');
     } finally {
       _isSearching = false;
@@ -95,27 +71,13 @@ class RaceProvider extends ChangeNotifier {
     }
   }
 
-<<<<<<< HEAD
-  /// Busca corridas externamente quando não encontra resultados locais
-  Future<void> _searchExternalRaces(String query) async {
-    try {
-      _suggestions = await _raceService.searchExternalRaces(query);
-      
-      if (_suggestions.isNotEmpty) {
-        _showSuggestions = true;
-      } else {
-        _setError('Nenhuma corrida encontrada. Tente buscar por termos diferentes.');
-      }
-    } catch (e) {
-      _setError('Erro ao buscar corridas externas: ${e.toString()}');
-=======
   /// Busca corridas externamente usando IA (n8n) - chamado manualmente pelo usuário
   Future<void> searchExternalRaces() async {
     if (_searchQuery.trim().isEmpty) {
       _setError('Digite algo para buscar');
       return;
     }
-    
+
     await _searchExternalRaces(_searchQuery);
   }
 
@@ -125,11 +87,11 @@ class RaceProvider extends ChangeNotifier {
       print('🔍 Buscando externamente por: $query');
       _setLoading(true);
       notifyListeners();
-      
+
       // Busca sugestões do n8n
       _suggestions = await _raceService.searchExternalRaces(query);
       print('📦 Sugestões recebidas do n8n: ${_suggestions.length}');
-      
+
       if (_suggestions.isNotEmpty) {
         // Adiciona automaticamente todas as sugestões ao banco de dados
         int addedCount = 0;
@@ -147,17 +109,17 @@ class RaceProvider extends ChangeNotifier {
             print('❌ Erro ao adicionar sugestão ${suggestion.name}: $e');
           }
         }
-        
+
         print('📊 Total de corridas adicionadas: $addedCount');
-        
+
         // Faz uma nova busca local com a query para mostrar as corridas recém-adicionadas
         _races = await _raceService.searchRacesByName(query);
         print('🔍 Busca local após adicionar: ${_races.length} corridas encontradas');
-        
+
         // Limpa as sugestões já que foram adicionadas
         _suggestions.clear();
         _showSuggestions = false;
-        
+
         if (addedCount > 0) {
           // Mostra mensagem de sucesso
           _clearError();
@@ -177,7 +139,6 @@ class RaceProvider extends ChangeNotifier {
     } finally {
       _setLoading(false);
       notifyListeners();
->>>>>>> 210d463 (feat: login, pesquisa prontos)
     }
   }
 
@@ -313,21 +274,13 @@ class RaceProvider extends ChangeNotifier {
   /// Limpa mensagens de erro
   void _clearError() {
     _errorMessage = null;
-<<<<<<< HEAD
-=======
     _successMessage = null;
->>>>>>> 210d463 (feat: login, pesquisa prontos)
     notifyListeners();
   }
 
   /// Define mensagem de erro
   void _setError(String message) {
     _errorMessage = message;
-<<<<<<< HEAD
-    notifyListeners();
-  }
-
-=======
     _successMessage = null; // Limpa mensagem de sucesso quando há erro
     notifyListeners();
   }
@@ -337,7 +290,7 @@ class RaceProvider extends ChangeNotifier {
     _successMessage = message;
     _errorMessage = null; // Limpa erro quando há sucesso
     notifyListeners();
-    
+
     // Remove a mensagem de sucesso após 3 segundos
     Future.delayed(const Duration(seconds: 3), () {
       if (_successMessage == message) {
@@ -347,7 +300,7 @@ class RaceProvider extends ChangeNotifier {
     });
   }
 
->>>>>>> 210d463 (feat: login, pesquisa prontos)
+
   /// Define estado de loading
   void _setLoading(bool loading) {
     _isLoading = loading;
@@ -357,10 +310,7 @@ class RaceProvider extends ChangeNotifier {
   /// Limpa todas as mensagens e estados
   void clearMessages() {
     _errorMessage = null;
-<<<<<<< HEAD
-=======
     _successMessage = null;
->>>>>>> 210d463 (feat: login, pesquisa prontos)
     notifyListeners();
   }
 }
