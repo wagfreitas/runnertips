@@ -11,7 +11,6 @@ import '../widgets/race_card.dart';
 import '../widgets/race_suggestions_widget.dart';
 import '../providers/race_provider.dart';
 import '../pages/race_detail_screen.dart';
-import '../../../../shared/widgets/navigation/bottom_navigation.dart';
 
 class RacesScreen extends StatefulWidget {
   const RacesScreen({super.key});
