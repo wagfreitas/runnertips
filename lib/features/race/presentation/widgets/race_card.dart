@@ -35,10 +35,34 @@ class RaceCard extends StatelessWidget {
               height: 96,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
+<<<<<<< HEAD
                 image: DecorationImage(
                   image: NetworkImage(imageUrl),
                   fit: BoxFit.cover,
                 ),
+=======
+                color: AppColors.surfaceVariant,
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: imageUrl.isNotEmpty && 
+                      imageUrl.startsWith('http') &&
+                      !imageUrl.contains('placeholder')
+                    ? Image.network(
+                        imageUrl,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return _buildPlaceholderImage();
+                        },
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return const Center(
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          );
+                        },
+                      )
+                    : _buildPlaceholderImage(),
+>>>>>>> 210d463 (feat: login, pesquisa prontos)
               ),
             ),
             const SizedBox(width: 16),
@@ -65,6 +89,11 @@ class RaceCard extends StatelessWidget {
                       color: AppColors.textPrimary,
                       fontWeight: FontWeight.w700,
                     ),
+<<<<<<< HEAD
+=======
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+>>>>>>> 210d463 (feat: login, pesquisa prontos)
                   ),
                   const SizedBox(height: 4),
                   
@@ -106,12 +135,25 @@ class RaceCard extends StatelessWidget {
                       ),
                       const SizedBox(width: 8),
                       
+<<<<<<< HEAD
                       // Distância
                       Text(
                         distance,
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: AppColors.textSecondary,
                           fontWeight: FontWeight.w400,
+=======
+                      // Distância - usa Flexible para evitar overflow
+                      Flexible(
+                        child: Text(
+                          distance,
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: AppColors.textSecondary,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+>>>>>>> 210d463 (feat: login, pesquisa prontos)
                         ),
                       ),
                     ],
@@ -124,4 +166,18 @@ class RaceCard extends StatelessWidget {
       ),
     );
   }
+<<<<<<< HEAD
+=======
+
+  Widget _buildPlaceholderImage() {
+    return Container(
+      color: AppColors.primaryOrange.withOpacity(0.1),
+      child: Icon(
+        Icons.directions_run,
+        color: AppColors.primaryOrange,
+        size: 40,
+      ),
+    );
+  }
+>>>>>>> 210d463 (feat: login, pesquisa prontos)
 }

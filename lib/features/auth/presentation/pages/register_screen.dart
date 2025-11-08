@@ -4,7 +4,11 @@ import '../widgets/register_header.dart';
 import '../widgets/register_form.dart';
 import '../widgets/register_footer.dart';
 import '../providers/auth_provider.dart';
+<<<<<<< HEAD
 import '../../../race/presentation/pages/races_screen.dart';
+=======
+import '../../../home/presentation/pages/home_screen.dart';
+>>>>>>> 210d463 (feat: login, pesquisa prontos)
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -29,10 +33,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   void _handleRegisterSuccess() {
+<<<<<<< HEAD
     // Navegar para a tela inicial do sistema (races_screen)
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
         builder: (context) => const RacesScreen(),
+=======
+    // Navegar para a tela inicial do sistema (home_screen)
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (context) => const HomeScreen(),
+>>>>>>> 210d463 (feat: login, pesquisa prontos)
       ),
     );
   }

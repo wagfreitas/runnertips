@@ -11,6 +11,10 @@ class RaceProvider extends ChangeNotifier {
   bool _isSearching = false;
   bool _showSuggestions = false;
   String? _errorMessage;
+<<<<<<< HEAD
+=======
+  String? _successMessage;
+>>>>>>> 210d463 (feat: login, pesquisa prontos)
   String _searchQuery = '';
 
   // Getters
@@ -20,6 +24,10 @@ class RaceProvider extends ChangeNotifier {
   bool get isSearching => _isSearching;
   bool get showSuggestions => _showSuggestions;
   String? get errorMessage => _errorMessage;
+<<<<<<< HEAD
+=======
+  String? get successMessage => _successMessage;
+>>>>>>> 210d463 (feat: login, pesquisa prontos)
   String get searchQuery => _searchQuery;
 
   /// Carrega todas as corridas
@@ -36,8 +44,14 @@ class RaceProvider extends ChangeNotifier {
     }
   }
 
+<<<<<<< HEAD
   /// Busca corridas por nome
   Future<void> searchRaces(String query) async {
+=======
+  /// Busca corridas por nome (apenas busca local)
+  Future<void> searchRaces(String query) async {
+    print('🔍 Iniciando busca por: "$query"');
+>>>>>>> 210d463 (feat: login, pesquisa prontos)
     _searchQuery = query;
     _isSearching = true;
     _showSuggestions = false;
@@ -46,6 +60,7 @@ class RaceProvider extends ChangeNotifier {
 
     try {
       if (query.trim().isEmpty) {
+<<<<<<< HEAD
         await loadRaces();
       } else {
         _races = await _raceService.searchRacesByName(query);
@@ -56,6 +71,23 @@ class RaceProvider extends ChangeNotifier {
         }
       }
     } catch (e) {
+=======
+        print('📋 Busca vazia, carregando todas as corridas');
+        await loadRaces();
+      } else {
+        print('🔎 Buscando localmente por: "$query"');
+        _races = await _raceService.searchRacesByName(query);
+        print('📊 Resultados locais: ${_races.length} corridas encontradas');
+        
+        // Não busca externamente automaticamente - aguarda o usuário clicar no botão
+        if (_races.isEmpty) {
+          print('⚠️ Nenhum resultado local encontrado - aguardando ação do usuário');
+        }
+      }
+    } catch (e, stackTrace) {
+      print('❌ Erro na busca: $e');
+      print('Stack trace: $stackTrace');
+>>>>>>> 210d463 (feat: login, pesquisa prontos)
       _setError('Erro ao buscar corridas: ${e.toString()}');
     } finally {
       _isSearching = false;
@@ -63,6 +95,7 @@ class RaceProvider extends ChangeNotifier {
     }
   }
 
+<<<<<<< HEAD
   /// Busca corridas externamente quando não encontra resultados locais
   Future<void> _searchExternalRaces(String query) async {
     try {
@@ -75,6 +108,76 @@ class RaceProvider extends ChangeNotifier {
       }
     } catch (e) {
       _setError('Erro ao buscar corridas externas: ${e.toString()}');
+=======
+  /// Busca corridas externamente usando IA (n8n) - chamado manualmente pelo usuário
+  Future<void> searchExternalRaces() async {
+    if (_searchQuery.trim().isEmpty) {
+      _setError('Digite algo para buscar');
+      return;
+    }
+    
+    await _searchExternalRaces(_searchQuery);
+  }
+
+  /// Busca corridas externamente usando IA (n8n)
+  Future<void> _searchExternalRaces(String query) async {
+    try {
+      print('🔍 Buscando externamente por: $query');
+      _setLoading(true);
+      notifyListeners();
+      
+      // Busca sugestões do n8n
+      _suggestions = await _raceService.searchExternalRaces(query);
+      print('📦 Sugestões recebidas do n8n: ${_suggestions.length}');
+      
+      if (_suggestions.isNotEmpty) {
+        // Adiciona automaticamente todas as sugestões ao banco de dados
+        int addedCount = 0;
+        for (final suggestion in _suggestions) {
+          try {
+            print('➕ Adicionando corrida: ${suggestion.name}');
+            final raceId = await _raceService.addSuggestedRace(suggestion);
+            if (raceId != null) {
+              addedCount++;
+              print('✅ Corrida adicionada com ID: $raceId');
+            } else {
+              print('❌ Falha ao adicionar corrida: ${suggestion.name}');
+            }
+          } catch (e) {
+            print('❌ Erro ao adicionar sugestão ${suggestion.name}: $e');
+          }
+        }
+        
+        print('📊 Total de corridas adicionadas: $addedCount');
+        
+        // Faz uma nova busca local com a query para mostrar as corridas recém-adicionadas
+        _races = await _raceService.searchRacesByName(query);
+        print('🔍 Busca local após adicionar: ${_races.length} corridas encontradas');
+        
+        // Limpa as sugestões já que foram adicionadas
+        _suggestions.clear();
+        _showSuggestions = false;
+        
+        if (addedCount > 0) {
+          // Mostra mensagem de sucesso
+          _clearError();
+          _setSuccessMessage('✅ $addedCount corrida(s) encontrada(s) e adicionada(s) automaticamente!');
+          print('✅ $addedCount corrida(s) adicionada(s) automaticamente ao banco de dados');
+        } else {
+          _setError('Nenhuma corrida pôde ser adicionada ao banco de dados.');
+        }
+      } else {
+        print('⚠️ Nenhuma sugestão recebida do n8n');
+        _setError('Nenhuma corrida encontrada. Tente buscar por termos diferentes.');
+      }
+    } catch (e, stackTrace) {
+      print('❌ Erro ao buscar corridas externas: $e');
+      print('Stack trace: $stackTrace');
+      _setError('Erro ao buscar corridas externas: ${e.toString()}');
+    } finally {
+      _setLoading(false);
+      notifyListeners();
+>>>>>>> 210d463 (feat: login, pesquisa prontos)
     }
   }
 
@@ -210,15 +313,41 @@ class RaceProvider extends ChangeNotifier {
   /// Limpa mensagens de erro
   void _clearError() {
     _errorMessage = null;
+<<<<<<< HEAD
+=======
+    _successMessage = null;
+>>>>>>> 210d463 (feat: login, pesquisa prontos)
     notifyListeners();
   }
 
   /// Define mensagem de erro
   void _setError(String message) {
     _errorMessage = message;
+<<<<<<< HEAD
     notifyListeners();
   }
 
+=======
+    _successMessage = null; // Limpa mensagem de sucesso quando há erro
+    notifyListeners();
+  }
+
+  /// Define mensagem de sucesso
+  void _setSuccessMessage(String message) {
+    _successMessage = message;
+    _errorMessage = null; // Limpa erro quando há sucesso
+    notifyListeners();
+    
+    // Remove a mensagem de sucesso após 3 segundos
+    Future.delayed(const Duration(seconds: 3), () {
+      if (_successMessage == message) {
+        _successMessage = null;
+        notifyListeners();
+      }
+    });
+  }
+
+>>>>>>> 210d463 (feat: login, pesquisa prontos)
   /// Define estado de loading
   void _setLoading(bool loading) {
     _isLoading = loading;
@@ -228,6 +357,10 @@ class RaceProvider extends ChangeNotifier {
   /// Limpa todas as mensagens e estados
   void clearMessages() {
     _errorMessage = null;
+<<<<<<< HEAD
+=======
+    _successMessage = null;
+>>>>>>> 210d463 (feat: login, pesquisa prontos)
     notifyListeners();
   }
 }

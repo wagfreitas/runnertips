@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import '../../../core/constants/app_colors.dart';
 
+<<<<<<< HEAD
 enum BottomNavItem { community, races, training, profile }
+=======
+enum BottomNavItem { community, races, tips, profile }
+>>>>>>> 210d463 (feat: login, pesquisa prontos)
 
 class BottomNavigation extends StatelessWidget {
   final BottomNavItem selectedItem;
@@ -42,6 +46,7 @@ class BottomNavigation extends StatelessWidget {
                 Icons.emoji_events,
                 'Races',
                 BottomNavItem.races,
+<<<<<<< HEAD
                 isSelected: true,
               ),
               _buildNavItem(
@@ -49,6 +54,14 @@ class BottomNavigation extends StatelessWidget {
                 Icons.fitness_center,
                 'Training',
                 BottomNavItem.training,
+=======
+              ),
+              _buildNavItem(
+                context,
+                Icons.lightbulb_outline,
+                'Dicas',
+                BottomNavItem.tips,
+>>>>>>> 210d463 (feat: login, pesquisa prontos)
               ),
               _buildNavItem(
                 context,

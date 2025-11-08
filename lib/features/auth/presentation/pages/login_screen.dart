@@ -6,7 +6,11 @@ import '../widgets/login_form.dart';
 import '../widgets/login_footer.dart';
 import '../providers/login_provider.dart';
 import 'register_screen.dart';
+<<<<<<< HEAD
 import '../../../race/presentation/pages/races_screen.dart';
+=======
+import '../../../home/presentation/pages/home_screen.dart';
+>>>>>>> 210d463 (feat: login, pesquisa prontos)
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -43,10 +47,17 @@ class _LoginScreenState extends State<LoginScreen> {
       );
 
       if (result.isSuccess && mounted) {
+<<<<<<< HEAD
         // Navigate to races screen with slide animation
         Navigator.of(context).pushReplacement(
           AppAnimations.createSlideRoute(
             const RacesScreen(),
+=======
+        // Navigate to home screen with slide animation
+        Navigator.of(context).pushReplacement(
+          AppAnimations.createSlideRoute(
+            const HomeScreen(),
+>>>>>>> 210d463 (feat: login, pesquisa prontos)
             begin: const Offset(1.0, 0.0),
             duration: const Duration(milliseconds: 350),
           ),

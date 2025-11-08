@@ -1,0 +1,33 @@
+MELHORIA PARA O NODE "HTTP Request (SearchApi.io)"
+
+Ajuste a query de busca para priorizar sites oficiais:
+
+===========================================
+
+QUERY ATUAL (substituir):
+={{$json.location}} {{$json.race_type === 'marathon' ? 'marathon' : $json.race_type === 'half' ? 'half marathon' : 'running race'}}
+
+QUERY MELHORADA (prioriza site oficial):
+={{$json.query_text}} site oficial OR página oficial OR inscrições
+
+OU, se quiser ser mais específico, crie duas buscas:
+
+BUSCA 1 (Prioritária - Site Oficial):
+={{$json.query_text}} "site oficial" OR "página oficial" OR "website oficial"
+
+BUSCA 2 (Fallback - Informações Gerais):
+={{$json.query_text}} inscrições OR registro OR {{$json.location}} {{$json.race_type === 'marathon' ? 'marathon' : $json.race_type === 'half' ? 'half marathon' : 'running race'}}
+
+===========================================
+
+OPÇÃO: Criar múltiplas buscas no agente
+
+Se o n8n permitir múltiplas ferramentas de busca, você pode:
+1. Primeira busca: "{query_text} site oficial"
+2. Segunda busca: "{query_text} inscrições"  
+3. Terceira busca: "{query_text}" (geral)
+
+E o agente prioriza os resultados da primeira busca.
+
+===========================================
+
