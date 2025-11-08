@@ -1,15 +1,9 @@
 import 'package:flutter/material.dart';
-<<<<<<< HEAD
-import '../../../../core/constants/app_colors.dart';
-import '../../../../core/services/session_service.dart';
-import '../../../../core/widgets/auth_wrapper.dart';
-=======
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/services/session_service.dart';
 import '../../../auth/presentation/pages/login_screen.dart';
 import '../../../../scripts/seed_races.dart';
->>>>>>> 210d463 (feat: login, pesquisa prontos)
 import '../widgets/race_search_bar.dart';
 import '../widgets/race_filter_button.dart';
 import '../widgets/race_view_switcher.dart';
@@ -17,10 +11,7 @@ import '../widgets/race_card.dart';
 import '../widgets/race_suggestions_widget.dart';
 import '../providers/race_provider.dart';
 import '../pages/race_detail_screen.dart';
-<<<<<<< HEAD
 import '../../../../shared/widgets/navigation/bottom_navigation.dart';
-=======
->>>>>>> 210d463 (feat: login, pesquisa prontos)
 
 class RacesScreen extends StatefulWidget {
   const RacesScreen({super.key});
@@ -42,8 +33,6 @@ class _RacesScreenState extends State<RacesScreen> {
     super.initState();
     _raceProvider = RaceProvider();
     _raceProvider.loadRaces();
-<<<<<<< HEAD
-=======
     // TEMPORÁRIO: Executar seed de corridas (apenas uma vez)
     _runSeedOnce();
   }
@@ -52,7 +41,7 @@ class _RacesScreenState extends State<RacesScreen> {
     // Verifica se já executou o seed (usando shared preferences)
     final prefs = await SharedPreferences.getInstance();
     final hasSeeded = prefs.getBool('has_seeded_races') ?? false;
-    
+
     if (!hasSeeded) {
       try {
         // Importa e executa o seed
@@ -64,7 +53,6 @@ class _RacesScreenState extends State<RacesScreen> {
         print('Erro ao executar seed: $e');
       }
     }
->>>>>>> 210d463 (feat: login, pesquisa prontos)
   }
 
   @override
@@ -76,16 +64,13 @@ class _RacesScreenState extends State<RacesScreen> {
   }
 
   Future<void> _handleLogout() async {
-<<<<<<< HEAD
-=======
     print('🔴 Logout button clicked');
-    
+
     if (!mounted) {
       print('⚠️ Widget not mounted');
       return;
     }
 
->>>>>>> 210d463 (feat: login, pesquisa prontos)
     final shouldLogout = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
@@ -93,13 +78,6 @@ class _RacesScreenState extends State<RacesScreen> {
         content: const Text('Tem certeza que deseja sair?'),
         actions: [
           TextButton(
-<<<<<<< HEAD
-            onPressed: () => Navigator.of(context).pop(false),
-            child: const Text('Cancelar'),
-          ),
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(true),
-=======
             onPressed: () {
               Navigator.of(context).pop(false);
             },
@@ -109,29 +87,17 @@ class _RacesScreenState extends State<RacesScreen> {
             onPressed: () {
               Navigator.of(context).pop(true);
             },
->>>>>>> 210d463 (feat: login, pesquisa prontos)
             child: const Text('Sair'),
           ),
         ],
       ),
     );
 
-<<<<<<< HEAD
-    if (shouldLogout == true) {
-      await _sessionService.logout();
-      if (mounted) {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (context) => const AuthWrapper(),
-          ),
-        );
-      }
-=======
     print('🔴 Dialog result: $shouldLogout');
 
     if (shouldLogout == true) {
       print('🔴 Starting logout process...');
-      
+
       if (!mounted) {
         print('⚠️ Widget not mounted before logout');
         return;
@@ -169,7 +135,7 @@ class _RacesScreenState extends State<RacesScreen> {
         }
 
         print('🔴 Navigating to LoginScreen...');
-        
+
         // Navegar para a tela de login na raiz, removendo todas as rotas anteriores
         Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
           MaterialPageRoute(
@@ -177,18 +143,18 @@ class _RacesScreenState extends State<RacesScreen> {
           ),
           (route) => false, // Remove todas as rotas anteriores
         );
-        
+
         print('✅ Navigation completed');
       } catch (e, stackTrace) {
         print('❌ Error during logout: $e');
         print('Stack trace: $stackTrace');
-        
+
         // Fechar o loading se ainda estiver aberto
         if (mounted) {
           try {
             Navigator.of(context, rootNavigator: true).pop();
           } catch (_) {}
-          
+
           // Ainda assim navegar para login
           Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
             MaterialPageRoute(
@@ -200,7 +166,6 @@ class _RacesScreenState extends State<RacesScreen> {
       }
     } else {
       print('🔴 Logout cancelled by user');
->>>>>>> 210d463 (feat: login, pesquisa prontos)
     }
   }
 
@@ -222,7 +187,7 @@ class _RacesScreenState extends State<RacesScreen> {
 
   Widget _buildRaceList() {
     final races = _raceProvider.races;
-    
+
     if (races.isEmpty) {
       return const Center(
         child: Column(
@@ -295,19 +260,6 @@ class _RacesScreenState extends State<RacesScreen> {
                     textAlign: TextAlign.center,
                   ),
                 ),
-<<<<<<< HEAD
-                Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: AppColors.surfaceVariant,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: IconButton(
-                    icon: const Icon(Icons.logout),
-                    onPressed: _handleLogout,
-                    color: AppColors.textPrimary,
-=======
                 GestureDetector(
                   onTap: () {
                     print('🔴 Logout button tapped');
@@ -320,12 +272,11 @@ class _RacesScreenState extends State<RacesScreen> {
                       color: AppColors.surfaceVariant,
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    child: Icon(
+                    child: const Icon(
                       Icons.logout,
                       color: AppColors.textPrimary,
                       size: 20,
                     ),
->>>>>>> 210d463 (feat: login, pesquisa prontos)
                   ),
                 ),
               ],
@@ -406,9 +357,6 @@ class _RacesScreenState extends State<RacesScreen> {
                   );
                 }
 
-<<<<<<< HEAD
-                if (_raceProvider.errorMessage != null) {
-=======
                 // Mostra mensagem de sucesso via SnackBar se houver
                 if (_raceProvider.successMessage != null) {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -424,20 +372,20 @@ class _RacesScreenState extends State<RacesScreen> {
                 }
 
                 // Se não há resultados e há uma busca ativa, mostra opção de buscar com IA
-                if (_raceProvider.races.isEmpty && 
-                    _raceProvider.searchQuery.trim().isNotEmpty && 
+                if (_raceProvider.races.isEmpty &&
+                    _raceProvider.searchQuery.trim().isNotEmpty &&
                     !_raceProvider.isSearching) {
                   return Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(
+                        const Icon(
                           Icons.search_off,
                           size: 64,
                           color: AppColors.textSecondary,
                         ),
                         const SizedBox(height: 16),
-                        Text(
+                        const Text(
                           'Nenhuma corrida encontrada',
                           style: TextStyle(
                             color: AppColors.textPrimary,
@@ -447,7 +395,7 @@ class _RacesScreenState extends State<RacesScreen> {
                           textAlign: TextAlign.center,
                         ),
                         const SizedBox(height: 8),
-                        Text(
+                        const Text(
                           'Tente buscar por termos diferentes\nou use IA para encontrar mais corridas',
                           style: TextStyle(
                             color: AppColors.textSecondary,
@@ -457,8 +405,8 @@ class _RacesScreenState extends State<RacesScreen> {
                         ),
                         const SizedBox(height: 24),
                         ElevatedButton.icon(
-                          onPressed: _raceProvider.isLoading 
-                              ? null 
+                          onPressed: _raceProvider.isLoading
+                              ? null
                               : () => _raceProvider.searchExternalRaces(),
                           icon: const Icon(Icons.auto_awesome, size: 20),
                           label: const Text('Buscar usando IA'),
@@ -480,14 +428,13 @@ class _RacesScreenState extends State<RacesScreen> {
                 }
 
                 // Mostra erro apenas se houver mensagem de erro específica
-                if (_raceProvider.errorMessage != null && 
+                if (_raceProvider.errorMessage != null &&
                     _raceProvider.searchQuery.trim().isEmpty) {
->>>>>>> 210d463 (feat: login, pesquisa prontos)
                   return Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(
+                        const Icon(
                           Icons.error_outline,
                           size: 64,
                           color: AppColors.error,
@@ -541,7 +488,6 @@ class _RacesScreenState extends State<RacesScreen> {
           ),
         ],
       ),
-<<<<<<< HEAD
       bottomNavigationBar: BottomNavigation(
         selectedItem: BottomNavItem.races,
         onItemSelected: (item) {
@@ -562,8 +508,6 @@ class _RacesScreenState extends State<RacesScreen> {
           }
         },
       ),
-=======
->>>>>>> 210d463 (feat: login, pesquisa prontos)
     );
   }
 }

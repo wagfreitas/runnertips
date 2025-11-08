@@ -35,17 +35,11 @@ class RaceCard extends StatelessWidget {
               height: 96,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
-<<<<<<< HEAD
-                image: DecorationImage(
-                  image: NetworkImage(imageUrl),
-                  fit: BoxFit.cover,
-                ),
-=======
                 color: AppColors.surfaceVariant,
               ),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(12),
-                child: imageUrl.isNotEmpty && 
+                child: imageUrl.isNotEmpty &&
                       imageUrl.startsWith('http') &&
                       !imageUrl.contains('placeholder')
                     ? Image.network(
@@ -62,7 +56,6 @@ class RaceCard extends StatelessWidget {
                         },
                       )
                     : _buildPlaceholderImage(),
->>>>>>> 210d463 (feat: login, pesquisa prontos)
               ),
             ),
             const SizedBox(width: 16),
@@ -89,11 +82,8 @@ class RaceCard extends StatelessWidget {
                       color: AppColors.textPrimary,
                       fontWeight: FontWeight.w700,
                     ),
-<<<<<<< HEAD
-=======
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
->>>>>>> 210d463 (feat: login, pesquisa prontos)
                   ),
                   const SizedBox(height: 4),
                   
@@ -134,15 +124,7 @@ class RaceCard extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: 8),
-                      
-<<<<<<< HEAD
-                      // Distância
-                      Text(
-                        distance,
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: AppColors.textSecondary,
-                          fontWeight: FontWeight.w400,
-=======
+
                       // Distância - usa Flexible para evitar overflow
                       Flexible(
                         child: Text(
@@ -153,7 +135,6 @@ class RaceCard extends StatelessWidget {
                           ),
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
->>>>>>> 210d463 (feat: login, pesquisa prontos)
                         ),
                       ),
                     ],
@@ -166,8 +147,6 @@ class RaceCard extends StatelessWidget {
       ),
     );
   }
-<<<<<<< HEAD
-=======
 
   Widget _buildPlaceholderImage() {
     return Container(
@@ -179,5 +158,4 @@ class RaceCard extends StatelessWidget {
       ),
     );
   }
->>>>>>> 210d463 (feat: login, pesquisa prontos)
 }
