@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../core/constants/app_colors.dart';
 
-enum BottomNavItem { community, races, tips, profile }
+enum BottomNavItem { community, races, chat, tips, profile }
 
 class BottomNavigation extends StatelessWidget {
   final BottomNavItem selectedItem;
@@ -42,6 +42,12 @@ class BottomNavigation extends StatelessWidget {
                 Icons.emoji_events,
                 'Races',
                 BottomNavItem.races,
+              ),
+              _buildNavItem(
+                context,
+                Icons.smart_toy_outlined,
+                'IA Chat',
+                BottomNavItem.chat,
               ),
               _buildNavItem(
                 context,

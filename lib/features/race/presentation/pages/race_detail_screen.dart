@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/models/race_model.dart';
+import '../../../chat/presentation/pages/chat_screen.dart';
 
 class RaceDetailScreen extends StatelessWidget {
   final RaceModel race;
@@ -307,6 +308,30 @@ class RaceDetailScreen extends StatelessWidget {
             ),
           ),
         ],
+        const SizedBox(height: 12),
+        // Botao de Chat IA
+        SizedBox(
+          width: double.infinity,
+          height: 50,
+          child: ElevatedButton.icon(
+            onPressed: () => _openChat(context),
+            icon: const Icon(Icons.smart_toy_outlined, color: Colors.white),
+            label: const Text(
+              'Perguntar ao Assistente IA',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.secondaryBlue,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -372,6 +397,18 @@ class RaceDetailScreen extends StatelessWidget {
       SnackBar(
         content: Text('Inscrição para ${race.name} em desenvolvimento'),
         backgroundColor: AppColors.primaryOrange,
+      ),
+    );
+  }
+
+  void _openChat(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ChatScreen(
+          raceId: race.id,
+          raceName: race.name,
+        ),
       ),
     );
   }

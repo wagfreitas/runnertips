@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../shared/widgets/navigation/bottom_navigation.dart';
 import '../../../race/presentation/pages/races_screen.dart';
+import '../../../chat/presentation/pages/chat_screen.dart';
 import '../../../tips/presentation/pages/tips_screen.dart';
 import '../../../profile/presentation/pages/profile_screen.dart';
 
@@ -48,6 +49,8 @@ class _HomeScreenState extends State<HomeScreen> {
         );
       case BottomNavItem.races:
         return const RacesScreen();
+      case BottomNavItem.chat:
+        return const ChatScreen();
       case BottomNavItem.tips:
         return const TipsScreen();
       case BottomNavItem.profile:
