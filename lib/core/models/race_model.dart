@@ -21,6 +21,20 @@ class RaceModel extends Equatable {
   final DateTime updatedAt;
   final bool isExternal; // Se foi adicionada via agente externo
 
+  // Campos de rota e mapa (v2)
+  final String? gpxUrl;
+  final double? elevationGain;
+  final double? elevationLoss;
+  final double? maxElevation;
+  final double? minElevation;
+  final double? difficultyScore;
+  final List<String> terrainTypes;
+  final String? type; // 'road', 'trail', 'ultra', 'mixed'
+
+  // Campos RAG (v2)
+  final int totalTips;
+  final double? avgRating;
+
   const RaceModel({
     required this.id,
     required this.name,
@@ -40,6 +54,16 @@ class RaceModel extends Equatable {
     required this.createdAt,
     required this.updatedAt,
     this.isExternal = false,
+    this.gpxUrl,
+    this.elevationGain,
+    this.elevationLoss,
+    this.maxElevation,
+    this.minElevation,
+    this.difficultyScore,
+    this.terrainTypes = const [],
+    this.type,
+    this.totalTips = 0,
+    this.avgRating,
   });
 
   factory RaceModel.fromMap(Map<String, dynamic> map) {
@@ -62,6 +86,16 @@ class RaceModel extends Equatable {
       createdAt: (map['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
       updatedAt: (map['updatedAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
       isExternal: map['isExternal'] ?? false,
+      gpxUrl: map['gpxUrl'],
+      elevationGain: map['elevationGain']?.toDouble(),
+      elevationLoss: map['elevationLoss']?.toDouble(),
+      maxElevation: map['maxElevation']?.toDouble(),
+      minElevation: map['minElevation']?.toDouble(),
+      difficultyScore: map['difficultyScore']?.toDouble(),
+      terrainTypes: List<String>.from(map['terrainTypes'] ?? []),
+      type: map['type'],
+      totalTips: map['totalTips'] ?? 0,
+      avgRating: map['avgRating']?.toDouble(),
     );
   }
 
@@ -85,6 +119,16 @@ class RaceModel extends Equatable {
       'createdAt': Timestamp.fromDate(createdAt),
       'updatedAt': Timestamp.fromDate(updatedAt),
       'isExternal': isExternal,
+      'gpxUrl': gpxUrl,
+      'elevationGain': elevationGain,
+      'elevationLoss': elevationLoss,
+      'maxElevation': maxElevation,
+      'minElevation': minElevation,
+      'difficultyScore': difficultyScore,
+      'terrainTypes': terrainTypes,
+      'type': type,
+      'totalTips': totalTips,
+      'avgRating': avgRating,
     };
   }
 
@@ -107,6 +151,16 @@ class RaceModel extends Equatable {
     DateTime? createdAt,
     DateTime? updatedAt,
     bool? isExternal,
+    String? gpxUrl,
+    double? elevationGain,
+    double? elevationLoss,
+    double? maxElevation,
+    double? minElevation,
+    double? difficultyScore,
+    List<String>? terrainTypes,
+    String? type,
+    int? totalTips,
+    double? avgRating,
   }) {
     return RaceModel(
       id: id ?? this.id,
@@ -127,6 +181,16 @@ class RaceModel extends Equatable {
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
       isExternal: isExternal ?? this.isExternal,
+      gpxUrl: gpxUrl ?? this.gpxUrl,
+      elevationGain: elevationGain ?? this.elevationGain,
+      elevationLoss: elevationLoss ?? this.elevationLoss,
+      maxElevation: maxElevation ?? this.maxElevation,
+      minElevation: minElevation ?? this.minElevation,
+      difficultyScore: difficultyScore ?? this.difficultyScore,
+      terrainTypes: terrainTypes ?? this.terrainTypes,
+      type: type ?? this.type,
+      totalTips: totalTips ?? this.totalTips,
+      avgRating: avgRating ?? this.avgRating,
     );
   }
 
@@ -155,6 +219,18 @@ class RaceModel extends Equatable {
     }
   }
 
+  /// Verifica se a corrida tem dados de rota/mapa
+  bool get hasRouteData => gpxUrl != null || elevationGain != null;
+
+  /// Retorna label de dificuldade
+  String get difficultyLabel {
+    final score = difficultyScore ?? 0;
+    if (score < 3) return 'Facil';
+    if (score < 5) return 'Moderado';
+    if (score < 7) return 'Dificil';
+    return 'Extremo';
+  }
+
   @override
   List<Object?> get props => [
         id,
@@ -175,6 +251,16 @@ class RaceModel extends Equatable {
         createdAt,
         updatedAt,
         isExternal,
+        gpxUrl,
+        elevationGain,
+        elevationLoss,
+        maxElevation,
+        minElevation,
+        difficultyScore,
+        terrainTypes,
+        type,
+        totalTips,
+        avgRating,
       ];
 }
 

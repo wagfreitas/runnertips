@@ -74,6 +74,18 @@ dependencies:
 
   # Paginação
   infinite_scroll_pagination: ^4.0.0
+
+  # Supabase (RAG + vector search)
+  supabase_flutter: ^2.8.0
+
+  # GPX parsing (rotas de corrida)
+  gpx: ^2.2.0
+
+  # Markdown rendering (respostas do RAG)
+  flutter_markdown: ^0.7.4
+
+  # UUID generation
+  uuid: ^4.5.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

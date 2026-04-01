@@ -7,7 +7,12 @@ enum TipType {
   transport,
   tourism,
   raceTip,
-  general
+  general,
+  safety,
+  shopping,
+  travelPackage,
+  raceKit,
+  training
 }
 
 enum TipCategory {
@@ -41,6 +46,10 @@ class TipModel extends Equatable {
   final bool isVerified;
   final TipStats stats;
 
+  // Campos RAG (v2)
+  final String embeddingStatus; // 'not_embedded', 'embedded', 'failed'
+  final String? vectorId; // ID no Supabase knowledge_chunks
+
   const TipModel({
     required this.id,
     required this.userId,
@@ -58,6 +67,8 @@ class TipModel extends Equatable {
     this.isActive = true,
     this.isVerified = false,
     required this.stats,
+    this.embeddingStatus = 'not_embedded',
+    this.vectorId,
   });
 
   factory TipModel.fromMap(Map<String, dynamic> map) {
@@ -84,6 +95,8 @@ class TipModel extends Equatable {
       isActive: map['isActive'] ?? true,
       isVerified: map['isVerified'] ?? false,
       stats: TipStats.fromMap(map['stats'] ?? {}),
+      embeddingStatus: map['embeddingStatus'] ?? 'not_embedded',
+      vectorId: map['vectorId'],
     );
   }
 
@@ -105,6 +118,8 @@ class TipModel extends Equatable {
       'isActive': isActive,
       'isVerified': isVerified,
       'stats': stats.toMap(),
+      'embeddingStatus': embeddingStatus,
+      'vectorId': vectorId,
     };
   }
 
@@ -125,6 +140,8 @@ class TipModel extends Equatable {
     bool? isActive,
     bool? isVerified,
     TipStats? stats,
+    String? embeddingStatus,
+    String? vectorId,
   }) {
     return TipModel(
       id: id ?? this.id,
@@ -143,8 +160,12 @@ class TipModel extends Equatable {
       isActive: isActive ?? this.isActive,
       isVerified: isVerified ?? this.isVerified,
       stats: stats ?? this.stats,
+      embeddingStatus: embeddingStatus ?? this.embeddingStatus,
+      vectorId: vectorId ?? this.vectorId,
     );
   }
+
+  bool get isEmbedded => embeddingStatus == 'embedded';
 
   @override
   List<Object?> get props => [

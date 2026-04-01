@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'core/theme/app_theme.dart';
 import 'core/widgets/auth_wrapper.dart';
+import 'core/services/supabase_service.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'firebase_options.dart';
@@ -15,6 +16,9 @@ void main() async {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
+
+    // Inicializa Supabase (RAG + vector search)
+    await SupabaseService.instance.initialize();
 
     // Configurar Crashlytics
     FlutterError.onError = (errorDetails) {
